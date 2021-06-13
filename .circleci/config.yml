@@ -7,9 +7,9 @@ workflows:
       - build-n-publish:
           requires:
             - python-test
-      - create-update
+      - create-update:
           requires:
-            - build-n-publish
+           - build-n-publish
 
 jobs:
   python-test:
