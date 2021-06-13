@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: premvilas30/sample_deployment_ct:latest
+        image: premvilas30/sample_deployment_ct
         ports:
           - containerPort: 80
 
