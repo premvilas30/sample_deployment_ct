@@ -20,6 +20,7 @@ jobs:
           command: |
             . demo/bin/activate
             python demo_test.py
+      - setup_remote_docker
       - run:
           name: Build and push Docker image
           command: |
