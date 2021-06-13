@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: docker.io/library/sample_app:latest
+        image: premvilas30/sample_deployment_ct:latest
         ports:
           - containerPort: 80
 
