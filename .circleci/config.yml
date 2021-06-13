@@ -57,6 +57,7 @@ jobs:
     steps:
       - checkout
       - kubernetes/install-kubectl
+      - kubernetes/install-kubeconfig
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: deployment.yaml
