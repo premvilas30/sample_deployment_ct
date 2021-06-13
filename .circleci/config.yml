@@ -1,0 +1,67 @@
+version: 2.1
+
+workflows:
+  build-n-deploy:
+    jobs:
+      - python-test
+      - build-n-publish:
+          requires:
+            - python-test
+      #- create-update:
+      #    requires:
+      #     - build-n-publish
+
+jobs:
+  python-test:
+    docker:
+      - image: circleci/python:3.7.10
+        environment:
+          FLASK_CONFIG: testing
+    steps:
+      - checkout
+      - run:
+          name: Setup VirtualEnv
+          command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=sample_deployment_ct' >> $BASH_ENV 
+            virtualenv demo
+            . demo/bin/activate
+            pip install --no-cache-dir -r requirements.txt
+      - run:
+          name: Run Tests
+          command: |
+            . demo/bin/activate
+            python demo_test.py
+  build-n-publish:
+    docker:
+      - image: circleci/python:3.7.10
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: setup variable
+          command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            echo 'export BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export IMAGE_NAME=sample_deployment_ct' >> $BASH_ENV
+      - run:
+          name: Buil and push Docker image
+          command: |
+            docker build -t premvilas30/$IMAGE_NAME:$BRANCH -t premvilas30/$IMAGE_NAME:$TAG .
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+            docker push premvilas30/$IMAGE_NAME:$TAG
+            docker push premvilas30/$IMAGE_NAME:$BRANCH
+  create-update:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/install-kubeconfig
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: deployment.yaml
+          resource-name: deployment/sample-deployment
+          show-kubectl-command: true
+orbs:
+  kubernetes: circleci/kubernetes@0.12.0
