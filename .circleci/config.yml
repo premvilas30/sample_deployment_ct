@@ -24,7 +24,7 @@ jobs:
           name: Build and push Docker image
           command: |
             . demo/bin/activate
-            pyinstaller -f demo.py
+            pyinstaller -F demo.py
             docker build -t premvilas30/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push premvilas30/$IMAGE_NAME:$TAG
