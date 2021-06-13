@@ -39,5 +39,6 @@ jobs:
           command: |
             docker build -t premvilas30/$IMAGE_NAME:$tag -t premvilas30/$IMAGE_NAME:latest .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-            docker push premvilas30/$IMAGE_NAME --all-tags
+            docker push premvilas30/$IMAGE_NAME:$tag
+            docker push premvilas30/$IMAGE_NAME:latest
 
