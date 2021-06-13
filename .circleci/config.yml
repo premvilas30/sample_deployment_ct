@@ -19,7 +19,7 @@ jobs:
           name: Run Tests
           command: |
             . demo/bin/activate
-            python test_demo.py
+            python demo_test.py
       - run:
           name: Build and push Docker image
           command: |
