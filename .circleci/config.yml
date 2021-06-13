@@ -7,6 +7,9 @@ workflows:
       - build-n-publish:
           requires:
             - python-test
+      - create-update
+          requires:
+            - build-n-publish
 
 jobs:
   python-test:
@@ -45,8 +48,19 @@ jobs:
           name: Buil and push Docker image
           command: |
             docker build -t premvilas30/$IMAGE_NAME:$BRANCH -t premvilas30/$IMAGE_NAME:$TAG .
-            # docker tag premvilas30/$IMAGE_NAME:$TAG premvilas30/$IMAGE_NAME:$BRANCH 
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push premvilas30/$IMAGE_NAME:$TAG
             docker push premvilas30/$IMAGE_NAME:$BRANCH
-
+  create-update:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: deployment.yaml
+          resource-name: deployment/sample-deployment
+          show-kubectl-command: true
+orbs:
+  kubernetes: circleci/kubernetes@0.12.0
