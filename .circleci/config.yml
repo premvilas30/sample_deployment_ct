@@ -38,10 +38,10 @@ jobs:
       - run:
           name: Build and push Docker image
           command: |
-            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-            echo 'export BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo 'export IMAGE_NAME=sample_deployment_ct' >> $BASH_ENV
-            docker build -t premvilas30/$IMAGE_NAME:1 .
+            # echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+            # echo 'export BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            # echo 'export IMAGE_NAME=sample_deployment_ct' >> $BASH_ENV
+            docker build -t premvilas30/test:4 .
             # docker tag premvilas30/$IMAGE_NAME:$TAG premvilas30/$IMAGE_NAME:$BRANCH 
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push premvilas30/$IMAGE_NAME --all-tags
