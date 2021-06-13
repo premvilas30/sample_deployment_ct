@@ -26,6 +26,6 @@ jobs:
           name: Build and push Docker image
           command: |
             . demo/bin/activate
-            docker build -t premvilas30/$IMAGE_NAME:$TAG .
+            docker build -t premvilas30/$IMAGE_NAME .
             docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
             docker push premvilas30/$IMAGE_NAME
